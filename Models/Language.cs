@@ -15,7 +15,7 @@ namespace AspNetCoreDatabaseLocalizationDemo.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Culture { get; set; }
-
+        public string Direction { get; set; }
         public virtual ICollection<StringResource> StringResources { get; set; }
     }
 }
