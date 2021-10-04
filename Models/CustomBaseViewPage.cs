@@ -23,6 +23,9 @@ namespace AspNetCoreDatabaseLocalizationDemo.Models
         public delegate HtmlString Localizer(string resourceKey, params object[] args);
         private Localizer _localizer;
 
+        public delegate HtmlString LanguageDirection();
+        private LanguageDirection _languageDirection;
+        
         public Localizer Localize
         {
             get
@@ -50,6 +53,34 @@ namespace AspNetCoreDatabaseLocalizationDemo.Models
                     }
                 }
                 return _localizer;
+            }
+        }
+        
+         public LanguageDirection SelectedLanguageDirection
+        {
+            get
+            {
+                if (_languageDirection == null)
+                {
+                    var currentCulture = Thread.CurrentThread.CurrentUICulture.Name;
+
+                    var language = LanguageService.GetLanguageByCulture(currentCulture);
+                    if (language != null)
+                    {
+                        _languageDirection = () =>
+                        {
+                            return new HtmlString(language.Direction);
+                        };
+                    }
+                    else
+                    {
+                        _languageDirection = () =>
+                        {
+                            return new HtmlString(Constant.MyConstant.Language_LTR_Direction);
+                        };
+                    }
+                }
+                return _languageDirection;
             }
         }
     }
